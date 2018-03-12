@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!--如果你想使用@Autowired注解，那么就必须事先在 Spring 容器中声明 AutowiredAnnotationBeanPostProcessor Bean。-->
+
+    <!--如果想使用@ Resource 、@ PostConstruct、@ PreDestroy等注解就必须声明CommonAnnotationBeanPostProcessor-->
+
+    <!--如果想使用@PersistenceContext注解，就必须声明PersistenceAnnotationBeanPostProcessor的Bean。-->
+
+    <!--如果想使用 @Required的注解，就必须声明RequiredAnnotationBeanPostProcessor的Bean。-->
+
+    <!--他的作用是式地向 Spring 容器注册AutowiredAnnotationBeanPostProcessor、CommonAnnotationBeanPostProcessor、-->
+    <!--PersistenceAnnotationBeanPostProcessor 以及 RequiredAnnotationBeanPostProcessor 这 4 个BeanPostProcessor。-->
+    <context:component-scan base-package="com.vvvv.cooks"></context:component-scan>
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+    <!--9. DruidDataSource 1. druid 数据源 2. 阿里巴巴数据连接池对象-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close"
+          init-method="init">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://192.168.199.224/cook"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="vvvv"></property>
+        <property name="initialSize" value="3"></property>
+        <property name="maxActive" value="30"></property>
+        <property name="minIdle" value="5"></property>
+        <property name="maxWait" value="10000"></property>
+    </bean>
+
+    <!--1. 事务管理器 2. 对数据源dataSource进行事务管理,一般认为是JDBC级别的事务管理,如果要实现业务级别的事务管理,可以使用aop通知或者JTA框架-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
+
+    <!--1. SqlSessionFactory工厂的建造类 2. mybatis和spring整合时,spring 通过该类管理mybatis的核心工厂-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.vvvv.cooks.dao"></property>
+    </bean>
+
+    <!--1. 资源调度解析器 2. spring mvc框架在实现资源调用时 解析以及编译资源的类-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--8. JstlView 1. Jstl视图 2. 配合资源调度解析器使用 在资源调度解析器解析资源时 允许资源中包含JSTL,并通过该类解析-->
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+        <property name="prefix" value="/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--上传使用-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+</beans>
