@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+	"-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vvvv.cooks.dao.CooksDAO">
+
+	<!--<insert id="saveCookMakeFood" parameterType="com.njbdqn.cooks.vo.Cooks" -->
+					<!--useGeneratedKeys="true" keyProperty="cafid">-->
+		<!--insert into cookandfoods(foodid,cookid,makedate) values(#{foodid},#{cookid},now())-->
+	<!--</insert>-->
+</mapper>

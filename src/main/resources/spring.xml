@@ -51,6 +51,12 @@
     <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
 
     <!--1. SqlSessionFactory工厂的建造类 2. mybatis和spring整合时,spring 通过该类管理mybatis的核心工厂-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <!--<property name="mapperLocations" value="classpath:com/vvvv/cooks/dao/*.xml"></property>-->
+    </bean>
+
+    <!--1. 第三方的扫描器 2. 扫描dao下的Mapper对应的接口,实例化接口并存放在spring容器中供其他对象注入-->
     <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.vvvv.cooks.dao"></property>
     </bean>
